@@ -20,12 +20,12 @@ ws.onmessage = message => {
     const response = JSON.parse(message.data)
 
     if (response.method === 'connect') {
-        if (getCookie('clientID')) {
-            clientID = getCookie('clientID')
-        } else {
-            clientID = response.clientID
-            // setCookie('clientID', clientID, 2)
-        }
+        // if (getCookie('clientID')) {
+        //     clientID = getCookie('clientID')
+        // } else {
+        clientID = response.clientID
+        // setCookie('clientID', clientID, 2)
+        // }
         console.log(clientID);
     }
 
