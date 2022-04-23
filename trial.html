@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chess socket</title>
+</head>
+
+<body>
+    <div id="setColor">
+
+        <button id="getWhite" onclick="getWhite()">
+    </div>
+
+    </button>
+
+    <script>
+        const btnWhite = document.getElementById('getWhite')
+        const btnBlack = document.getElementById('getBlack')
+        const colorDiv = document.getElementById('setColor')
+        let clientID = null;
+        const ws = new WebSocket('ws://localhost:3000')
+        ws.onmessage = message => {
+            const response = JSON.parse(message.data)
+            if (response.method === 'connect') {
+                clientID = response.clientID
+                console.log(clientID);
+            }
+        }
+
+        const getWhite = () => {
+            const payload = {
+                method: 'set-color',
+                color: 'white',
+                clientID
+            }
+            ws.send(JSON.stringify(payload))
+
+            colorDiv.style.display = 'none'
+        }
+    </script>
+</body>
+
+</html>

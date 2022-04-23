@@ -1,0 +1,344 @@
+/* *{
+    margin: 0;
+    padding: 0;
+} */
+
+#start-game{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#start-game *{
+    margin: 30px ;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.chess-container table tr{
+/* transition: 1S ; */
+}
+.chess-container table{
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    transition: transform 1s;
+}
+.chess-container table tr td{
+    width: 10%;
+    height: 10%;
+    border-collapse: collapse;
+    border: 0px solid black;
+    border-spacing: 0px;
+    transition: 0.5s;
+    z-index: 10;
+    transition: transform 0s;
+}
+.chess-inner td:hover{
+    /* background-color: yellow !important; */
+}.chess-inner{
+
+    background-image: radial-gradient(rgb(24, 35, 56) 30%, rgb(24, 35, 56, 0.8) 50%, rgb(24, 35, 56, 0.7) 55%, rgb(24, 35, 56, 0.4) 100%)
+}
+.chess-container table tbody{
+    border:2px solid black
+}
+/* .chess-container table tr{
+} */
+
+.chess-container table tr:nth-child(2n+2) td:nth-child(2n+1) {
+    background-color: rgb(175, 95, 42);
+}
+ .chess-container table tr:nth-child(2n+1) td:nth-child(2n+2) {
+    background-color: rgb(175, 95, 42);
+}
+
+.chess-container table tr:nth-child(2n+1) td:nth-child(2n+1) {
+    background-color: #e7d4b2;
+}
+.chess-container table tr:nth-child(2n+2) td:nth-child(2n+2) {
+    background-color: #e7d4b2;
+}
+
+.chess-container table tr:nth-child(2n+2) td:nth-child(2n+1):hover {
+    background-color: rgb(0, 102, 255);
+}
+ .chess-container table tr:nth-child(2n+1) td:nth-child(2n+2):hover {
+    background-color: rgb(0, 102, 255);
+}
+
+.chess-container table tr:nth-child(2n+1) td:nth-child(2n+1):hover {
+    background-color: rgb(0, 102, 255);
+}
+.chess-container table tr:nth-child(2n+2) td:nth-child(2n+2):hover {
+    background-color: rgb(0, 102, 255);
+}
+
+
+/* ------ for borders outside the board  ------ */
+
+
+/* .chess-container table tr:nth-child(2n+2) td:nth-child(2n+2) {
+    background-color: #e7d4b2;
+}
+.chess-container table tr:first-child td,
+ .chess-container table tr:last-child td,
+ .chess-container table tr td:first-child,
+ .chess-container table tr td:last-child {
+    background-color: rgb(175, 95, 42) !important;
+    z-index: 15;
+    border-spacing: 2px !important;
+} */
+
+/* ------- */
+
+/* .chess-container table tr:first-child td:not(:first-child):not(:last-child){
+    border-bottom: 2px solid black;
+}
+ .chess-container table tr:last-child td:not(:first-child):not(:last-child){
+    border-top: 2px solid black;
+}
+ .chess-container table tr:not(:first-child):not(:last-child) td:first-child{
+    border-right: 2px solid black;
+}
+ .chess-container table tr:not(:first-child):not(:last-child) td:last-child {
+    border-left: 2px solid black;
+} */
+
+.chess-container{
+    margin: auto;
+    width: 90%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.chess-inner{
+    position: relative;
+}
+
+.rot-right{
+    height: 141.42%;
+    width: 2px;
+    background-color: black;
+    transform: rotate(45deg);
+    margin: auto;
+    overflow: hidden;
+}
+
+.rot-left{
+    height: 141.42%;
+    width: 2px;
+    background-color: black;
+    transform: rotate(-45deg);
+    margin: auto;
+    overflow: hidden;
+}
+
+.chess-nav{
+    position: absolute;
+    background-color: rgba(175, 84, 23, 0.856);
+}
+
+
+.right-nav{
+    top: 0 ;
+    right: -15%;
+    width: 15%;
+    height: 100%;
+}
+
+.left-nav{
+    top: 0 ;
+    left: -15%;
+    width: 15%;
+    height: 100%;
+}
+
+.top-nav{
+    top: -15% ;
+    left: -15%;
+    width: 130%;
+    height: 15%;
+}
+
+.bottom-nav{
+    bottom: -15% ;
+    left: -15%;
+    width: 130%;
+    height: 15%;
+}
+
+
+
+.piece{
+    font-size: 150%;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+}
+
+.chess-white{
+    color: white;
+    background: radial-gradient(rgba(7, 7, 7, 0.2) 25%, rgba(7, 7, 7, 0.1) 50%, transparent 100%);
+}
+
+.chess-white::before{
+    opacity: 1 !important;
+}
+
+.chess-white:hover{
+    background: radial-gradient(rgba(7, 7, 7, 0.5) 35%, rgba(7, 7, 7, 0.25) 70%, transparent 100%);
+    /* opacity: 1; */
+}
+.chess-black{
+    color: black;
+    background-image: radial-gradient(rgba(7, 7, 7, 0.17) 25%, rgba(7, 7, 7, 0.09) 50%, transparent 100%);
+}
+
+.chess-container table tr td:hover{
+    background-image: radial-gradient(rgba(7, 7, 7, 0.3) 35%, rgba(7, 7, 7, 0.15) 70%, transparent 100%) ;
+    background-color: rgb(0, 102, 255) ;
+    /* rgb(26, 46, 68); */
+    /* transition: 0.5s; */
+    /* opacity: 1; */
+}
+
+.focused-piece{
+    background-image: radial-gradient(rgba(7, 7, 7, 0.3) 35%, rgba(7, 7, 7, 0.15) 70%, transparent 100%) ;
+    background-color: rgb(0, 255, 21) !important;
+}
+
+.focused-piece-other{
+    background-color: rgba(255, 145, 0, 0.856) !important;
+}
+
+.move-option {
+    background-color: rgb(0, 255, 21) !important;
+}
+
+.move-option-threat {
+    background-color: rgba(255, 145, 0, 0.856)  !important;
+}
+
+.move-option-kill{
+    background-color: rgb(255, 38, 0) !important;
+}
+
+.winner-div{
+    /* background-color: rgb(0, 255, 21) ; */
+    z-index: 99;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%,-50%);
+    min-width: 50%;
+    min-height: 100px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    outline:20px solid black
+}
+.winner-div h1{
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+.winner-div p{
+    margin-top: 5px ;
+    width: 100%;
+}
+
+
+#reset-board{
+    position: absolute;
+    right: -10%;
+    top:-10%;
+    color: black;
+    z-index: 9;
+    cursor: pointer;
+
+}
+
+#rotate-board{
+    position: absolute;
+    right: -7.5%;
+    top:50%;
+    transform: translateX(50%);
+    color: black;
+    z-index: 9;
+    cursor: pointer;
+}
+
+
+
+.board-reverse{
+    transform: rotate(180deg);
+}
+
+
+.div-turn{
+    position: absolute;
+    transition: opacity 0.4s;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 15%;
+    
+    font-family: sans-serif;
+    z-index: 9;
+    padding-top: 0;
+}
+
+.div-turn h2{
+    margin: 0px;
+    height: auto;
+    width: 100%;
+    text-align: center;
+}
+
+@media screen and (max-width: 100vh) {
+    .chess-inner{
+        width: 70vw;
+        height: 70vw;
+        box-sizing: border-box;
+        margin: auto;
+    }
+}
+
+
+@media screen and (min-width: 100vh) {
+    .chess-inner{
+        width: 70vh;
+        height: 70vh;
+        box-sizing: border-box;
+        margin: auto;
+    }
+}
