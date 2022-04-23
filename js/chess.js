@@ -24,7 +24,7 @@ ws.onmessage = message => {
             clientID = getCookie('clientID')
         } else {
             clientID = response.clientID
-            setCookie('clientID', clientID, 2)
+            // setCookie('clientID', clientID, 2)
         }
         console.log(clientID);
     }

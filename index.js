@@ -132,7 +132,7 @@ wss.on('request', request => {
 
     const clientID = guid()
     clients[clientID] = {
-        connection,
+        connection
     }
 
     let payLoad = {
