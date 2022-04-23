@@ -10,7 +10,9 @@ let createBtn = null
 let gameIDInput = null
 let joinBtn
 
-const ws = new WebSocket('ws://localhost:3000')
+const HOST = location.origin.replace(/^http/, 'ws')
+
+const ws = new WebSocket(HOST)
 
 
 
