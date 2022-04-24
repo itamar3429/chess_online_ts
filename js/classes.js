@@ -1,6 +1,6 @@
-class Pieces {
+class BoardPieces {
     /**
-     * @param {[object]} pieces
+     * @param {[object]} BoardPieces
      */
     constructor(Arr) {
         if (Arr) {
@@ -20,10 +20,6 @@ class Pieces {
     //     if (pieces)
     //         this.pieces = pieces
     // }
-    /**
-     * 
-     * @param {Piece} piece
-     */
 
     whoseTurn() {
         // this.turnDiv.style.bottom =  this.turnDiv.style.bottom .includes('100')? '-15%': '100%'
@@ -80,8 +76,8 @@ class Pieces {
     }
 
     getPieceByName(type, color) {
-        let pieces = this.pieces.filter((piece) => piece.type === type && piece.color === color)
-        return pieces
+        let BoardPieces = this.pieces.filter((piece) => piece.type === type && piece.color === color)
+        return BoardPieces
     }
 
     isKingAttacked() {
@@ -223,13 +219,13 @@ class Pieces {
         return x > -1 && x < 8 && y > -1 && y < 8
     }
 
-    getAllOppMove(colorSelf, forT = true) {
+    getAllOppMove(colorSelf, forT = true, initial = false) {
 
         let possibleMovements = []
 
         let filtered = this.pieces.filter(x => x.color != colorSelf && !x.deleted)
         filtered.forEach(cell => {
-            let pos = cell.possibleMoveLocations(forT)
+            let pos = cell.possibleMoveLocations(forT, initial)
             pos.map(p => {
                 p.type = cell.type;
                 p.color = cell.color;
@@ -294,7 +290,7 @@ class Pieces {
         let kingThreat = this.isKingAttacked()
         // if (kingThreat.threat == false)
         //     return true
-        let moves = this.getAllOppMove(this.turn == 'black' ? 'white' : 'black', false)
+        let moves = this.getAllOppMove(this.turn == 'black' ? 'white' : 'black', false, true)
 
         // let kingThreat = this.isKingAttacked()
 
@@ -322,10 +318,7 @@ class Pieces {
     }
 
     kingAttackAfterMove(piece, moves) {
-        // return false
         let myColor = this.turn
-        // let myPieces = pieceClass.pieces.filter(piece => piece.color == myColor)
-        // myPieces.filter(piece => {
         moves = moves.filter(move => {
             let res = false
             let x = piece.x
@@ -355,7 +348,17 @@ class Pieces {
 
 
 
-class Piece extends Pieces {
+class Piece extends BoardPieces {
+    /**
+     * 
+     * @param {Number} y 
+     * @param {Number} x 
+     * @param {string} type 
+     * @param {string} color 
+     * @param {[string]} classes 
+     * @param {BoardPieces} parent 
+     * @param {Number} index 
+     */
     constructor(y, x, type, color, classes, parent, index) {
         super(null)
         this.y = y
@@ -395,7 +398,7 @@ class Piece extends Pieces {
         this.MoveLocations(-1, -1)
     }
 
-    possibleMoveLocations(isForT = false) {
+    possibleMoveLocations(isForT = false, initial = true) {
         const types = {
             pawn: 'pawnMove',
             king: 'kingMove',
@@ -405,7 +408,7 @@ class Piece extends Pieces {
             knight: 'knightMove',
         }
         // this[types[this.type]](isForT)
-        let result = this[types[this.type]](isForT)
+        let result = this[types[this.type]](isForT, initial)
 
 
         // let kingA = this.parent.isKingAttacked()
@@ -477,7 +480,7 @@ class Piece extends Pieces {
         return this.possibleMoves
     }
 
-    kingMove(isForT = false) {
+    kingMove(isForT = false, initial = true) {
         let x = this.x
         let y = this.y
         let checkArr = [{
@@ -508,15 +511,15 @@ class Piece extends Pieces {
 
         checkArr = checkArr.filter((check) => this.isLocationExists(check.y, check.x) && (isForT || !this.parent.getPiece(check.y, check.x, this.color)));
 
-        let opponetsMove = isForT ? [] : this.parent.getAllOppMove(this.color)
+        let opponetsMove = !initial ? [] : this.parent.getAllOppMove(this.color, true, false);
 
-            !isForT && checkArr.map((check) => {
-                let threat = isForT ? false : opponetsMove.filter(move => move.x === check.x && move.y === check.y)
-                // console.log(threat);
-                check.threat = threat ? threat.length > 0 : false
-                check.kill = this.parent.getPiece(check.y, check.x, this.getOpponentColor()) ? true : false
-                return check
-            })
+        !isForT && checkArr.map((check) => {
+            let threat = isForT ? false : opponetsMove.filter(move => move.x === check.x && move.y === check.y)
+            // console.log(threat);
+            check.threat = threat ? threat.length > 0 : false
+            check.kill = this.parent.getPiece(check.y, check.x, this.getOpponentColor()) ? true : false
+            return check
+        })
         this.possibleMoves = checkArr
         return this.possibleMoves
     }
@@ -533,70 +536,78 @@ class Piece extends Pieces {
         let x = this.x
         let y = this.y
 
-        //get horizontal movements to right
-        for (let j = x + 1; j < 8; j++) {
-            let LocOccupied = this.parent.getPiece(y, j)
-            if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
-                this.possibleMoves.push({
-                    y,
-                    x: j,
-                    kill: LocOccupied ? true : false
-                })
-                if (LocOccupied && ((LocOccupied.piece.color !== this.color) || (LocOccupied.piece.color == this.color && isForT))) // check if king then keep going
-                    if (!(LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king' && isForT))
-                        break
-            } else
-                break
-        }
-
-        //get horizontal movement left
-        for (let j = x - 1; j > -1; j--) {
-            let LocOccupied = this.parent.getPiece(y, j)
-            if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
-                this.possibleMoves.push({
-                    y,
-                    x: j,
-                    kill: LocOccupied ? true : false
-                })
-                if ((LocOccupied && LocOccupied.piece.color !== this.color) || (LocOccupied && LocOccupied.piece.color == this.color && isForT))
-                    if (!(LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king' && isForT))
-                        break
-            } else
-                break
-        }
 
 
-        //get vertical movement down
-        for (let i = y + 1; i < 8; i++) {
-            let LocOccupied = this.parent.getPiece(i, x)
-            if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
-                this.possibleMoves.push({
-                    y: i,
-                    x,
-                    kill: LocOccupied ? true : false
-                })
-                if ((LocOccupied && LocOccupied.piece.color !== this.color) || (LocOccupied && LocOccupied.piece.color == this.color && isForT))
-                    if (!(isForT && LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king'))
-                        break
-            } else
-                break
-        }
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, 1, 0, isForT))
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, -1, 0, isForT))
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, 0, 1, isForT))
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, 0, -1, isForT))
 
-        //get vertical movement up
-        for (let i = y - 1; i > -1; i--) {
-            let LocOccupied = this.parent.getPiece(i, x)
-            if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
-                this.possibleMoves.push({
-                    y: i,
-                    x,
-                    kill: LocOccupied ? true : false
-                })
-                if ((LocOccupied && LocOccupied.piece.color !== this.color) || (LocOccupied && LocOccupied.piece.color == this.color && isForT))
-                    if (!(isForT && LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king'))
-                        break
-            } else
-                break
-        }
+        // // get horizontal movements to right
+        // for (let j = x + 1; j < 8; j++) {
+        //     let LocOccupied = this.parent.getPiece(y, j)
+        //     if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
+        //         this.possibleMoves.push({
+        //             y,
+        //             x: j,
+        //             kill: LocOccupied ? true : false
+        //         })
+        //         if (LocOccupied && ((LocOccupied.piece.color !== this.color) || (LocOccupied.piece.color == this.color && isForT))) // check if king then keep going
+        //             if (!(LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king' && isForT))
+        //                 break
+        //     } else
+        //         break
+        // }
+
+        // //get horizontal movement left
+        // for (let j = x - 1; j > -1; j--) {
+        //     let LocOccupied = this.parent.getPiece(y, j)
+        //     if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
+        //         this.possibleMoves.push({
+        //             y,
+        //             x: j,
+        //             kill: LocOccupied ? true : false
+        //         })
+        //         if ((LocOccupied && LocOccupied.piece.color !== this.color) || (LocOccupied && LocOccupied.piece.color == this.color && isForT))
+        //             if (!(LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king' && isForT))
+        //                 break
+        //     } else
+        //         break
+        // }
+
+
+        // //get vertical movement down
+        // for (let i = y + 1; i < 8; i++) {
+        //     let LocOccupied = this.parent.getPiece(i, x)
+        //     if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
+        //         this.possibleMoves.push({
+        //             y: i,
+        //             x,
+        //             kill: LocOccupied ? true : false
+        //         })
+        //         if ((LocOccupied && LocOccupied.piece.color !== this.color) || (LocOccupied && LocOccupied.piece.color == this.color && isForT))
+        //             if (!(isForT && LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king'))
+        //                 break
+        //     } else
+        //         break
+        // }
+
+        // //get vertical movement up
+        // for (let i = y - 1; i > -1; i--) {
+        //     let LocOccupied = this.parent.getPiece(i, x)
+        //     if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
+        //         this.possibleMoves.push({
+        //             y: i,
+        //             x,
+        //             kill: LocOccupied ? true : false
+        //         })
+        //         if ((LocOccupied && LocOccupied.piece.color !== this.color) || (LocOccupied && LocOccupied.piece.color == this.color && isForT))
+        //             if (!(isForT && LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king'))
+        //                 break
+        //     } else
+        //         break
+        // }
+
         return this.possibleMoves
 
     }
@@ -607,69 +618,74 @@ class Piece extends Pieces {
         let y = this.y
         this.possibleMoves = []
 
-        // check for all options to top
-        let temp1 = x + 1
-        let temp2 = x - 1
-        for (let i = y - 1; i > -1; i--) {
-            if (temp1 < 8 && (isForT || !this.parent.getPiece(i, temp1, this.color))) {
-                this.possibleMoves.push({
-                    y: i,
-                    x: temp1,
-                    kill: this.parent.getPiece(i, temp1) ? true : false
-                })
-                if (this.parent.getPiece(i, temp1, this.getOpponentColor()) ||
-                    this.parent.getPiece(i, temp1, this.color))
-                    temp1 = 8
-            } else {
-                temp1 = 8
-            }
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, 1, 1, isForT))
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, 1, -1, isForT))
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, -1, 1, isForT))
+        this.possibleMoves.push(...this.getMovesInDirection(y, x, -1, -1, isForT))
 
-            if (temp2 > -1 && (isForT || !this.parent.getPiece(i, temp2, this.color))) {
-                this.possibleMoves.push({
-                    y: i,
-                    x: temp2,
-                    kill: this.parent.getPiece(i, temp2) ? true : false
-                })
-                if (this.parent.getPiece(i, temp2, this.getOpponentColor()) ||
-                    this.parent.getPiece(i, temp2, this.color))
-                    temp2 = -1
-            } else
-                temp2 = -1
-            temp1++
-            temp2--
-        }
+        // // check for all options to top
+        // let temp1 = x + 1
+        // let temp2 = x - 1
+        // for (let i = y - 1; i > -1; i--) {
+        //     if (temp1 < 8 && (isForT || !this.parent.getPiece(i, temp1, this.color))) {
+        //         this.possibleMoves.push({
+        //             y: i,
+        //             x: temp1,
+        //             kill: this.parent.getPiece(i, temp1) ? true : false
+        //         })
+        //         if (this.parent.getPiece(i, temp1, this.getOpponentColor()) ||
+        //             this.parent.getPiece(i, temp1, this.color))
+        //             temp1 = 8
+        //     } else {
+        //         temp1 = 8
+        //     }
 
-        //check all options to bottom
-        temp1 = x + 1
-        temp2 = x - 1
-        for (let i = y + 1; i < 8; i++) {
-            if (temp1 < 8 && (isForT || !this.parent.getPiece(i, temp1, this.color))) {
-                this.possibleMoves.push({
-                    y: i,
-                    x: temp1,
-                    kill: this.parent.getPiece(i, temp1) ? true : false
-                })
-                if (this.parent.getPiece(i, temp1, this.getOpponentColor()) ||
-                    this.parent.getPiece(i, temp1, this.color))
-                    temp1 = 8
-            } else {
-                temp1 = 8
-            }
+        //     if (temp2 > -1 && (isForT || !this.parent.getPiece(i, temp2, this.color))) {
+        //         this.possibleMoves.push({
+        //             y: i,
+        //             x: temp2,
+        //             kill: this.parent.getPiece(i, temp2) ? true : false
+        //         })
+        //         if (this.parent.getPiece(i, temp2, this.getOpponentColor()) ||
+        //             this.parent.getPiece(i, temp2, this.color))
+        //             temp2 = -1
+        //     } else
+        //         temp2 = -1
+        //     temp1++
+        //     temp2--
+        // }
 
-            if (temp2 > -1 && (isForT || !this.parent.getPiece(i, temp2, this.color))) {
-                this.possibleMoves.push({
-                    y: i,
-                    x: temp2,
-                    kill: this.parent.getPiece(i, temp2) ? true : false
-                })
-                if (this.parent.getPiece(i, temp2, this.getOpponentColor()) ||
-                    this.parent.getPiece(i, temp2, this.color))
-                    temp2 = -1
-            } else
-                temp2 = -1
-            temp1++
-            temp2--
-        }
+        // //check all options to bottom
+        // temp1 = x + 1
+        // temp2 = x - 1
+        // for (let i = y + 1; i < 8; i++) {
+        //     if (temp1 < 8 && (isForT || !this.parent.getPiece(i, temp1, this.color))) {
+        //         this.possibleMoves.push({
+        //             y: i,
+        //             x: temp1,
+        //             kill: this.parent.getPiece(i, temp1) ? true : false
+        //         })
+        //         if (this.parent.getPiece(i, temp1, this.getOpponentColor()) ||
+        //             this.parent.getPiece(i, temp1, this.color))
+        //             temp1 = 8
+        //     } else {
+        //         temp1 = 8
+        //     }
+
+        //     if (temp2 > -1 && (isForT || !this.parent.getPiece(i, temp2, this.color))) {
+        //         this.possibleMoves.push({
+        //             y: i,
+        //             x: temp2,
+        //             kill: this.parent.getPiece(i, temp2) ? true : false
+        //         })
+        //         if (this.parent.getPiece(i, temp2, this.getOpponentColor()) ||
+        //             this.parent.getPiece(i, temp2, this.color))
+        //             temp2 = -1
+        //     } else
+        //         temp2 = -1
+        //     temp1++
+        //     temp2--
+        // }
         return this.possibleMoves
     }
 
@@ -725,4 +741,26 @@ class Piece extends Pieces {
         return this.possibleMoves
     }
 
+    getMovesInDirection(y, x, dY, dX, isForT) {
+        let moves = []
+        for (let i = 1; i < 8; i++) {
+            let row = y + dY * i
+            let col = x + dX * i
+            if (this.isLocationExists(row, col)) {
+                let LocOccupied = this.parent.getPiece(row, col)
+                if (!(LocOccupied && LocOccupied.piece.color == this.color) || isForT) {
+                    moves.push({
+                        y: row,
+                        x: col,
+                        kill: LocOccupied ? true : false
+                    })
+                    if (LocOccupied && ((LocOccupied.piece.color !== this.color) || (LocOccupied.piece.color == this.color && isForT)))
+                        if (!(LocOccupied.piece.color !== this.color && LocOccupied.piece.type == 'king' && isForT)) // check if king then keep going
+                            break
+                } else break
+            } else break
+
+        }
+        return moves
+    }
 }

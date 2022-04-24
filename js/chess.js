@@ -1,4 +1,4 @@
-let pieceClass = new Pieces(null)
+let pieceClass = new BoardPieces(null)
 
 let Mycolor = null
 let clientID = null
@@ -51,7 +51,7 @@ ws.onmessage = message => {
 
     if (response.method === 'start') {
         create_table()
-        pieceClass = new Pieces([chessPiecesB, chessPiecesW])
+        pieceClass = new BoardPieces([chessPiecesB, chessPiecesW])
         addListeners()
     }
 
@@ -118,8 +118,8 @@ window.onload = async () => {
 
     // create_table()
 
-    // //   initializes the Pieces class and inserts the Piece classes' array
-    // pieceClass = new Pieces([chessPiecesB, chessPiecesW])
+    // //   initializes the BoardPieces class and inserts the Piece classes' array
+    // pieceClass = new BoardPieces([chessPiecesB, chessPiecesW])
 
     // // add focus event listeners
     // addListeners()
