@@ -28,13 +28,14 @@ const iconEventCB = (e) => {
     if (pieceClass.isMyTurn(currentPiece.index)) {
         let positions = currentPiece.piece.possibleMoveLocations()
         let kingThreats = pieceClass.isKingAttacked()
+        let isKing = positions.length > 0 && (positions[0].threat == false || positions[0].threat == true)
         let isKingHasThreat = positions.length > 0 && ((positions[0].threat || positions[0].threat == false) ? positions.filter(x => x.threat == true).length > 0 : false)
 
         positions = positions.filter(pos => {
-            if (!isKingHasThreat && pieceClass.kingAttackedManager(pos.y, pos.x, kingThreats)) {
+            if (!isKing && pieceClass.kingAttackedManager(pos.y, pos.x, kingThreats)) {
                 return true
             }
-            if (isKingHasThreat) {
+            if (isKing) {
                 return true
             }
             return false
@@ -42,11 +43,6 @@ const iconEventCB = (e) => {
         positions = pieceClass.kingAttackAfterMove(currentPiece.piece, positions)
         positions.forEach((pos) => {
             if (!pos.threat) {
-                // if (
-                //     // (currentPiece.piece.type == 'king' && (!isKingHasThreat)) || 
-                //     (pieceClass.kingAttackedManager(pos.y, pos.x, kingThreats))
-                //     //  || (currentPiece.piece.type == 'king' && pieceClass.kingAttackedManager(pos.y, pos.x, kingThreats))
-                // )
                 addListenerToSelectors(
                     `#\\3${pos.y}-${pos.x}, #\\3${pos.y}-${pos.x} i`,
                     (element) => {
@@ -56,7 +52,6 @@ const iconEventCB = (e) => {
                         }
                     })
             } else {
-                // if (pieceClass.kingAttackedManager(pos.y, pos.x, kingThreats))
                 document.getElementById(`${pos.y}-${pos.x}`).classList.add('move-option-threat', 'move-option')
             }
         })
