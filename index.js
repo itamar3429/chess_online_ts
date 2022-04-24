@@ -23,9 +23,12 @@ const INDEX = './index.html'
 
 const server = express()
     .get('/chess', (req, res) => res.sendFile(INDEX, {
-        root: __dirname
+        root: __dirname + '/public'
     }))
-    .use(express.static('.'))
+    .get('/', (req, res) => res.sendFile(INDEX, {
+        root: __dirname + '/public'
+    }))
+    .use(express.static('public'))
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
