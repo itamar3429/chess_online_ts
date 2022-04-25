@@ -11,6 +11,8 @@ let gameIDInput = null
 let joinBtn
 let randomBtn
 let loadingDiv
+let copyLbl
+let copyIcon
 
 const HOST = location.origin.replace(/^http/, 'ws')
 
@@ -46,7 +48,7 @@ ws.onmessage = message => {
         }
         if (response.success) {
             GameDiv.style.display = 'none'
-            loadingDiv.style.display = 'unset'
+            loadingDiv.style.display = 'flex'
             gameID = response.game.id
             Mycolor = response.game.clients.filter(client => client.clientID == clientID)[0].color
         }
@@ -54,7 +56,7 @@ ws.onmessage = message => {
     }
 
     if (response.method === 'start') {
-        loadingDiv.style.display = ''
+        loadingDiv.style.display = 'none'
         create_table()
         pieceClass = new BoardPieces([chessPiecesB, chessPiecesW])
         addListeners()
@@ -100,6 +102,8 @@ window.onload = async () => {
     joinBtn = document.getElementById('join-game')
     randomBtn = document.getElementById('join-random')
     loadingDiv = document.getElementById('loader-container')
+    copyLbl = document.getElementById('copy-lbl')
+    copyIcon = document.getElementById('copyBtn')
 
 
 
@@ -137,13 +141,31 @@ window.onload = async () => {
             method: 'random',
             clientID
         }
-        loadingDiv.style.display = 'unset'
+        loadingDiv.style.display = 'flex'
 
         ws.send(JSON.stringify(payLoad))
 
         GameDiv.style.display = 'none'
-        loadingDiv.style.display = 'unset'
+        loadingDiv.style.display = 'flex'
     })
+
+
+    // join random game
+    copyIcon.addEventListener('click', (e) => {
+        copyText(gameIDInput.value)
+        copyLbl.style.visibility = 'visible'
+        copyLbl.style.opacity = '1'
+        setTimeout(() => {
+            // copyLbl.style.visibility = 'hidden'
+            copyLbl.style.opacity = '0'
+            setTimeout(() => {
+                copyLbl.style.visibility = 'hidden'
+                // copyLbl.style.opacity = '0'
+            }, 1000)
+        }, 1000)
+
+    })
+
 
 
 
@@ -168,8 +190,6 @@ window.onload = async () => {
     // // add focus event listeners
     // addListeners()
 }
-
-
 
 
 

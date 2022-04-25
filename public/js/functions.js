@@ -2,6 +2,13 @@ let selectedPieceIndex = 0
 
 
 
+/**
+ * 
+ * @param {string} txt 
+ */
+const copyText =(txt)=>{
+        navigator.clipboard.writeText(txt)
+}
 
 
 //needed to initialize all icon click event
