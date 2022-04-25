@@ -63,12 +63,13 @@
 
 #copy-lbl{
     position: absolute;
-    right: -75px;
+    right: -115px;
     /* top:1px; */
 
     padding: 3px 7px !important;
     margin: 3px;
-    background-color: rgb(211, 211, 211);
+    background-color: black;
+    color: rgb(211, 211, 211);
     border-radius: 5px;
     visibility: hidden;
     opacity: 0;
@@ -86,7 +87,7 @@ transform: translateY(-50%);
 border-left:5px solid transparent;
 border-top:5px solid transparent;
 border-bottom:5px solid transparent;
-border-right:5px solid rgb(211, 211, 211);
+border-right:5px solid black;
 left: -10px;
 position: absolute;
 
@@ -97,6 +98,8 @@ position: absolute;
     cursor: pointer;
     position: relative;
     color: rgb(199, 196, 196);
+    position: absolute;
+    right: -40px;
 
 }
 
@@ -106,12 +109,77 @@ position: absolute;
     font-family: sans-serif;
     top: -110%;
     transform: translate(50%,-50%);
-    background-color:rgb(211, 211, 211) ;
+    background-color:black ;
     padding:6px 8px ;
     border-radius: 3px;
     right: 50%;
     position: absolute;
-    color: black;
+    color: rgb(211, 211, 211);
+}
+
+#join-game, #join-random, #new-game{
+    position: relative;
+}
+
+#new-game::after{
+    content: 'create a new game room and retrieves a game id';
+    font-size: 12px;
+    font-family: sans-serif;
+    top: -60%;
+    transform: translate(-50%,-50%);
+    background-color:black ;
+    padding:6px 8px ;
+    border-radius: 3px;
+    left: 50%;
+    position: absolute;
+    color: rgb(211, 211, 211);
+    opacity: 0;
+    transition: visibility 0s, opacity 1s;
+}
+
+#new-game:hover:after{
+    opacity: 1;
+}
+
+#join-game::after{
+    content: 'join game with a generated game ID';
+    font-size: 12px;
+    font-family: sans-serif;
+    top: -60%;
+    transform: translate(-50%,-50%);
+    background-color:black ;
+    padding:6px 8px ;
+    border-radius: 3px;
+    left: 50%;
+    position: absolute;
+    color: rgb(211, 211, 211);
+    opacity: 0;
+    transition: visibility 0s, opacity 1s;
+}
+
+#join-game:hover:after{
+    opacity: 1;
+}
+
+
+#join-random::after{
+    content: 'join game with a random player';
+    font-size: 12px;
+    font-family: sans-serif;
+    top: -60%;
+    transform: translate(-50%,-50%);
+    background-color:black ;
+    padding:6px 8px ;
+    border-radius: 3px;
+    left: 50%;
+    position: absolute;
+    color: rgb(211, 211, 211);
+    opacity: 0;
+    transition: visibility 0s, opacity 1s;
+}
+
+#join-random:hover:after{
+    opacity: 1;
 }
 
 

@@ -22,19 +22,21 @@
     <div id="start-game">
         <h1>chess game</h1>
         <h2>create a new game or join a game</h2>
-        <input type="button" id="new-game" value="create a game"  class="btn btn-secondary">
+        <button type="button" id="new-game" class="btn btn-secondary">create a game</button>
 
         <!-- <div class="join-game"> -->
         <div style="display: flex; justify-content: center;  align-items: center; position: relative;">
-            <input type="text" style="margin: 5px !important;" id="game-id" placeholder="game id to join" class="form-control">
+            <input type="text" style="margin: 5px !important;" id="game-id" placeholder="game id to join"
+                class="form-control">
             <i id="copyBtn" class="fa-solid fa-copy" tabindex="0"></i>
             <label id="copy-lbl" for="copy">Copied!</label>
         </div>
 
-        <input type="button" id="join-game" value="join game"  class="btn btn-secondary">
+        <div style="display: flex; justify-content: space-around;">
+            <button id="join-game" class="btn btn-secondary">join game</button>
 
-        <input type="button" id="join-random" value="join random game"  class="btn btn-secondary">
-
+            <button id="join-random" class="btn btn-secondary">auto assign</button>
+        </div>
         <!-- </div> -->
     </div>
     <div id="loader-container">
