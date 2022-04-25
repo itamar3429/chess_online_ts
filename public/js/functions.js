@@ -184,7 +184,7 @@ const create_table = () => {
         pieceClass.turnDiv.style.opacity = '0'
         setTimeout(() => {
             pieceClass.turnDiv.style.opacity = '1'
-            pieceClass.turnDiv.style.bottom = pieceClass.turnDiv.style.bottom.includes('100') ? '-15%' : '100%'
+            pieceClass.turnDiv.style.bottom = pieceClass.turnDiv.style.bottom.includes('100') ? '-10%' : '100%'
         }, 600)
     })
 
