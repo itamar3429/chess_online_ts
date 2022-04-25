@@ -9,6 +9,8 @@ let GameDiv = null
 let createBtn = null
 let gameIDInput = null
 let joinBtn
+let randomBtn
+let loadingDiv
 
 const HOST = location.origin.replace(/^http/, 'ws')
 
@@ -39,20 +41,35 @@ ws.onmessage = message => {
         console.log(response)
         if (!response.success) {
             //tell the client he couldnt join 
+            // GameDiv.style.display = ''
+
         }
         if (response.success) {
-            gameID = response.game.id
             GameDiv.style.display = 'none'
+            loadingDiv.style.display = 'unset'
+            gameID = response.game.id
             Mycolor = response.game.clients.filter(client => client.clientID == clientID)[0].color
-
         }
 
     }
 
     if (response.method === 'start') {
+        loadingDiv.style.display = ''
         create_table()
         pieceClass = new BoardPieces([chessPiecesB, chessPiecesW])
         addListeners()
+    }
+
+    if (response.method == 'random') {
+
+        gameID = response.gameID
+        const payLoad = {
+            method: 'join',
+            gameID,
+            clientID
+        }
+        ws.send(JSON.stringify(payLoad))
+
     }
 
     if (response.method === 'set') {
@@ -64,6 +81,15 @@ ws.onmessage = message => {
 }
 
 
+
+window.onbeforeunload = () => {
+    ws.send(JSON.stringify({
+        method: 'close',
+        clientID
+    }))
+}
+
+
 // execute all the functions on load
 window.onload = async () => {
 
@@ -72,6 +98,8 @@ window.onload = async () => {
     createBtn = document.getElementById('new-game')
     gameIDInput = document.getElementById('game-id')
     joinBtn = document.getElementById('join-game')
+    randomBtn = document.getElementById('join-random')
+    loadingDiv = document.getElementById('loader-container')
 
 
 
@@ -99,6 +127,22 @@ window.onload = async () => {
         }
 
         ws.send(JSON.stringify(payLoad))
+    })
+
+
+    // join random game
+    randomBtn.addEventListener('click', (e) => {
+
+        const payLoad = {
+            method: 'random',
+            clientID
+        }
+        loadingDiv.style.display = 'unset'
+
+        ws.send(JSON.stringify(payLoad))
+
+        GameDiv.style.display = 'none'
+        loadingDiv.style.display = 'unset'
     })
 
 

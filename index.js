@@ -39,6 +39,7 @@ const wss = new WebSocket({
 let clients = {}
 
 let games = {}
+let randomGames = []
 
 let colors = {
     '0': 'white',
@@ -52,16 +53,16 @@ wss.on('request', request => {
     })
 
     connection.on('close', () => {
-        console.log('connection closed');
+
     })
 
     connection.on('message', message => {
         let result = JSON.parse(message.utf8Data)
+        const gameID = guid()
 
         // client want to create a new game
         if (result.method == 'create') {
 
-            const gameID = guid()
 
             games[gameID] = {
                 id: gameID,
@@ -93,7 +94,7 @@ wss.on('request', request => {
                     message: !game ? 'game not found' : 'game room is full'
                 }
                 con.send(JSON.stringify(payLoad))
-            } else {
+            } else if (game.clients.filter(x => x.clientID == clientID).length == 0) {
                 let color = colors[game.clients.length]
                 game.clients.push({
                     clientID,
@@ -120,6 +121,7 @@ wss.on('request', request => {
         }
 
 
+
         if (result.method == 'set') {
             let payLoad = {
                 method: 'set',
@@ -130,6 +132,37 @@ wss.on('request', request => {
             let gameID = result.gameID
             let game = games[gameID]
             game.clients.forEach(c => c.clientID != clientID && clients[c.clientID].connection.send(JSON.stringify(payLoad)))
+        }
+
+        if (result.method == 'random') {
+            let clientID = result.clientID
+            if (randomGames.length && randomGames.indexOf(clientID) == -1) {
+
+                let client2ID = randomGames[0]
+                randomGames.splice(0, 1)
+                games[gameID] = {
+                    id: gameID,
+                    clients: [],
+                    status: []
+                }
+
+                let payLoad = {
+                    method: 'random',
+                    gameID
+                }
+                let RandomClients = [clientID, client2ID]
+                RandomClients.forEach((cl) => {
+                    clients[cl].connection.send(JSON.stringify(payLoad))
+                })
+
+
+            } else {
+                randomGames.push(result.clientID)
+            }
+        }
+
+        if (result.method == 'close') {
+            randomGames = randomGames.filter(val => val !== result.clientID)
         }
     })
 

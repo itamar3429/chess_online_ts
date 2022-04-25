@@ -8,7 +8,7 @@
     <title>check-mate</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="./css/chess.css">
-    <script  src="./js/chess-conf.js"></script>
+    <script src="./js/chess-conf.js"></script>
     <script src="./js/classes.js"></script>
     <script src="./js/functions.js"></script>
     <script src="./js/chess.js"></script>
@@ -26,8 +26,16 @@
         <input type="text" id="game-id" placeholder="game id to join">
 
         <input type="button" id="join-game" value="join game">
+
+        <input type="button" id="join-random" value="join random game">
+
         <!-- </div> -->
     </div>
+    <div id="loader-container">
+        <div id="loader"></div>
+        <h4>waiting for a player to join</h4>
+    </div>
+
     <!-- <div class="winner-div">
         <h1>white wins !!</h1>
         <p>hope you had fun playing</p>
