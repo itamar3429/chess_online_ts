@@ -151,18 +151,24 @@ window.onload = async () => {
 
 
     // join random game
-    copyIcon.addEventListener('click', (e) => {
-        copyText(gameIDInput.value)
-        copyLbl.style.visibility = 'visible'
-        copyLbl.style.opacity = '1'
-        setTimeout(() => {
-            // copyLbl.style.visibility = 'hidden'
-            copyLbl.style.opacity = '0'
+    copyIcon.addEventListener('click', async (e) => {
+        gameIDInput.focus()
+        gameIDInput.select()
+        const isCopied = await new Promise((res, rej) => {
+            res(document.execCommand('copy'))
+        })
+        if (isCopied) {
+            copyLbl.style.visibility = 'visible'
+            copyLbl.style.opacity = '1'
             setTimeout(() => {
-                copyLbl.style.visibility = 'hidden'
-                // copyLbl.style.opacity = '0'
+                // copyLbl.style.visibility = 'hidden'
+                copyLbl.style.opacity = '0'
+                setTimeout(() => {
+                    copyLbl.style.visibility = 'hidden'
+                    // copyLbl.style.opacity = '0'
+                }, 1000)
             }, 1000)
-        }, 1000)
+        }
 
     })
 
