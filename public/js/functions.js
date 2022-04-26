@@ -121,7 +121,8 @@ const iconEventCB = (e) => {
             }
             return false
         })
-        positions = pieceClass.kingAttackAfterMove(currentPiece.piece, positions)
+        if (!isKing)
+            positions = pieceClass.kingAttackAfterMove(currentPiece.piece, positions)
         positions.forEach((pos) => {
             if (!pos.threat) {
                 addListenerToSelectors(
