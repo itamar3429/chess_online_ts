@@ -6,8 +6,8 @@ let selectedPieceIndex = 0
  * 
  * @param {string} txt 
  */
-const copyText =(txt)=>{
-        navigator.clipboard.writeText(txt)
+const copyText = (txt) => {
+    navigator.clipboard.writeText(txt)
 }
 
 
@@ -164,7 +164,11 @@ const create_table = () => {
     resetIcon.id = "reset-board"
     resetIcon.setAttribute('title', 'reset the board and start agian')
 
-    div.appendChild(navR)
+    createNumbers(true, navL)
+    createNumbers(false, navT)
+
+
+        div.appendChild(navR)
     div.appendChild(navL)
     div.appendChild(navT)
     div.appendChild(navB)
@@ -230,4 +234,14 @@ function getCookie(name) {
         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
+}
+
+
+function createNumbers(isNumbers, parent) {
+    for (let i = 0; i < 8; i++) {
+        const div = document.createElement('div')
+        div.classList.add(isNumbers ? 'vertical-numbers' : 'horizontal-numbers')
+        div.innerText = isNumbers? i+1: String.fromCharCode(i+1 + 64)
+        parent.appendChild(div)
+    }
 }

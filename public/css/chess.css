@@ -333,6 +333,10 @@ position: absolute;
         left: -10%;
         width: 10%;
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     
     .top-nav{
@@ -340,6 +344,10 @@ position: absolute;
         left: -10%;
         width: 120%;
         height: 10%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
     }
     
     .bottom-nav{
@@ -348,7 +356,26 @@ position: absolute;
         width: 120%;
         height: 10%;
     }
+
+    .vertical-numbers{
+        height: 12.5% ;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #bd8642;
+        font-family: serif;
+        font-weight: 600;
+    }
     
+    .horizontal-numbers{
+        width: 10.41% ;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #bd8642;
+        font-family: serif;
+        font-weight: 600;
+    }
     
     
     .piece{
@@ -450,12 +477,13 @@ position: absolute;
     #reset-board{
         position: absolute;
         right: -5%;
-        top:-5%;
+        top:4%;
         color: black;
         z-index: 9;
         cursor: pointer;
         transform: translate(50%,-50%);
-        color:white
+        color: #bd8642;
+
     }
     
     #rotate-board{
@@ -466,7 +494,8 @@ position: absolute;
         color: black;
         z-index: 9;
         cursor: pointer;
-        color: white;
+        color: #bd8642;
+
     }
     
     

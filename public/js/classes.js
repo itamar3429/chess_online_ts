@@ -26,7 +26,7 @@ class BoardPieces {
         this.turnDiv.style.opacity = '0'
         setTimeout(() => {
             this.turnDiv.style.opacity = '1'
-            this.turnDiv.style.bottom = this.turnDiv.style.bottom.includes('100') ? '-10%' : '100%'
+            // this.turnDiv.style.bottom = this.turnDiv.style.bottom.includes('100') ? '-10%' : '100%'
             this.turnDiv.style.color = this.turn
             this.turnDiv.firstElementChild.innerHTML = `${this.turn}'s turn`
         }, 500)
@@ -252,7 +252,9 @@ class BoardPieces {
         let divTurn = document.createElement('div')
         divTurn.classList.add('div-turn')
         divTurn.style.color = 'white'
-        divTurn.style.bottom = document.querySelector('.board-reverse') ? '100%' : '-10%'
+        divTurn.style.bottom =
+            // document.querySelector('.board-reverse') ? '100%' : 
+            '-10%'
         divTurn.innerHTML = `<h2>white's turn</h2>`
         document.body.querySelector('.chess-inner').appendChild(divTurn)
         this.turnDiv = divTurn
@@ -727,7 +729,6 @@ class Piece extends BoardPieces {
                 x: x - 2
             }
         ]
-
         checkArr.forEach((check) => {
             let oPiece = this.parent.getPiece(check.y, check.x, this.color)
             if (this.isLocationExists(check.y, check.x) && (isForT || !oPiece)) {
