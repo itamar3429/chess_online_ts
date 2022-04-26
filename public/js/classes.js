@@ -148,9 +148,9 @@ class BoardPieces {
             let res = false
             let x = piece.x
             let y = piece.y
-            pieceMoveToLocation(move.y, move.x)
+            piece.MoveToLocation(move.y, move.x)
             let kingThreat = this.isKingAttacked()
-            pieceMoveToLocation(y, x)
+            piece.MoveToLocation(y, x)
             res = !kingThreat.threat || this.kingAttackedManager(move.y, move.x, kingThreat)
             return res
         })
@@ -387,7 +387,7 @@ class Piece extends BoardPieces {
     deletePiece() {
         this.icon.remove()
         this.deleted = true
-        thisMoveToLocation(-1, -1)
+        this.MoveToLocation(-1, -1)
     }
 
     MoveToLocation(y, x) {
