@@ -64,13 +64,17 @@ const create_table = () => {
         i++
     }
 
+    if (Mycolor == 'black') {
+        table.classList.toggle('board-reverse')
+        Array.from(table.querySelectorAll('td')).forEach(el => el.classList.toggle('board-reverse'))
+    }
+
     rotateIcon.addEventListener('click', (e) => {
         table.classList.toggle('board-reverse')
         Array.from(table.querySelectorAll('td')).forEach(el => el.classList.toggle('board-reverse'))
         pieceClass.turnDiv.style.opacity = '0'
         setTimeout(() => {
             pieceClass.turnDiv.style.opacity = '1'
-            pieceClass.turnDiv.style.bottom = pieceClass.turnDiv.style.bottom.includes('100') ? '-10%' : '100%'
         }, 600)
     })
 
@@ -79,14 +83,7 @@ const create_table = () => {
 
         mainDiv.remove()
         GameDiv.style.display = ''
-
-        // pieceClass.resetBoard([chessPiecesB, chessPiecesW])
-        // addListeners()
     })
-
-    if (Mycolor == 'black') {
-        rotateIcon.click()
-    }
 }
 
 //needed to initialize all icon click event
