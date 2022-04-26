@@ -95,7 +95,6 @@ window.onbeforeunload = () => {
 // execute all the functions on load
 window.onload = async () => {
 
-
     GameDiv = document.getElementById('start-game')
     createBtn = document.getElementById('new-game')
     gameIDInput = document.getElementById('game-id')
@@ -104,9 +103,6 @@ window.onload = async () => {
     loadingDiv = document.getElementById('loader-container')
     copyLbl = document.getElementById('copy-lbl')
     copyIcon = document.getElementById('copyBtn')
-
-
-
 
     // create game click
     createBtn.addEventListener('click', (e) => {
@@ -171,57 +167,4 @@ window.onload = async () => {
         }
 
     })
-
-
-
-
-    // ws = new WebSocket('ws://localhost:3000')
-
-    // ws.onmessage = message => {
-    //     const response = JSON.parse(message.data)
-    //     if (response.method === 'connect') {
-    //         clientID = response.clientID
-    //         console.log(clientID);
-    //     }
-    // }
-
-
-
-
-    // create_table()
-
-    // //   initializes the BoardPieces class and inserts the Piece classes' array
-    // pieceClass = new BoardPieces([chessPiecesB, chessPiecesW])
-
-    // // add focus event listeners
-    // addListeners()
 }
-
-
-
-
-// ------   trials   -------
-
-
-// inbetween tester
-
-// let loc1 = {y:0,x:2}
-// let loc2 = {y:1,x:3}
-// let loc3 = {y:0,x:6}
-// console.log(pieceClass.isInbetween(loc1,loc2, loc3))
-
-
-// general tests
-//   console.log(  pieceClass.getPieceByName('pawn', 'black'))
-// console.log(pieceClass.isThreatened(2,3, 'white'))
-// console.log(pieceClass.pieces[14].possibleMoveLocations(true))
-// console.log(pieceClass.pieces[30].possibleMoveLocations(true))
-
-// console.log(pieceClass.pieces[14].possibleMoveLocations())
-// console.log(pieceClass.pieces[14])
-
-
-//some trials
-// pieceArr[0].y = 3
-// pieceArr[0].appendPiece()
-// pieceClass.setLocation(0, 7, 1)

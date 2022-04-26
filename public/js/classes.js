@@ -1,7 +1,4 @@
 class BoardPieces {
-    /**
-     * @param {[object]} BoardPieces
-     */
     constructor(Arr) {
         if (Arr) {
             this.inializePiece(Arr)
@@ -16,20 +13,51 @@ class BoardPieces {
             this.lastLocation = null
         }
     }
-    //     constructor(pieces) {
-    //     if (pieces)
-    //         this.pieces = pieces
-    // }
 
-    whoseTurn() {
-        // this.turnDiv.style.bottom =  this.turnDiv.style.bottom .includes('100')? '-15%': '100%'
-        this.turnDiv.style.opacity = '0'
-        setTimeout(() => {
-            this.turnDiv.style.opacity = '1'
-            // this.turnDiv.style.bottom = this.turnDiv.style.bottom.includes('100') ? '-10%' : '100%'
-            this.turnDiv.style.color = this.turn
-            this.turnDiv.firstElementChild.innerHTML = `${this.turn}'s turn`
-        }, 500)
+    inializePiece(Arr) {
+        let divTurn = document.createElement('div')
+        divTurn.classList.add('div-turn')
+        divTurn.style.color = 'white'
+        divTurn.style.bottom =
+            // document.querySelector('.board-reverse') ? '100%' : 
+            '-10%'
+        divTurn.innerHTML = `<h2>white's turn</h2>`
+        document.body.querySelector('.chess-inner').appendChild(divTurn)
+        this.turnDiv = divTurn
+
+        this.pieces = []
+        Arr.forEach((obj) => {
+            const keys = Object.keys(obj)
+            keys.forEach((key) => {
+                obj[key].forEach((piece, i) => {
+                    const newPiece = new Piece(piece.y, piece.x, piece.type, piece.color, piece.class, this, i)
+                    this.pieces.push(newPiece)
+                })
+            })
+        })
+    }
+
+    getPiece(y, x, color = null) {
+        let index = null
+        let piece = this.pieces.filter((piece, i) => {
+            if (piece.x === x && piece.y === y &&
+                (color ? piece.color == color : true)) {
+                index = i
+                return true
+            }
+            return false
+        })
+        if (piece.length)
+            return {
+                piece: piece[0],
+                index
+            }
+        return null
+    }
+
+    getPieceByName(type, color) {
+        let BoardPieces = this.pieces.filter((piece) => piece.type === type && piece.color === color)
+        return BoardPieces
     }
 
     resetBoard(Arr) {
@@ -57,29 +85,6 @@ class BoardPieces {
         }
     }
 
-    getPiece(y, x, color = null) {
-        let index = null
-        let piece = this.pieces.filter((piece, i) => {
-            if (piece.x === x && piece.y === y &&
-                (color ? piece.color == color : true)) {
-                index = i
-                return true
-            }
-            return false
-        })
-        if (piece.length)
-            return {
-                piece: piece[0],
-                index
-            }
-        return null
-    }
-
-    getPieceByName(type, color) {
-        let BoardPieces = this.pieces.filter((piece) => piece.type === type && piece.color === color)
-        return BoardPieces
-    }
-
     isKingAttacked() {
         const moves = this.getAllOppMove(this.turn, false)
         const king = this.getPieceByName('king', this.turn)[0]
@@ -100,32 +105,6 @@ class BoardPieces {
                 x
             }
         }
-    }
-
-    isMiddle(x1, x2, x3) {
-        return (x1 >= x2 && x2 >= x3) || (x1 <= x2 && x2 <= x3)
-    }
-
-    isInbetween(loc1, loc2, loc3) {
-        let y1 = loc1.y
-        let y2 = loc2.y
-        let x1 = loc1.x
-        let x2 = loc2.x
-        let y3 = loc3.y
-        let x3 = loc3.x
-
-        if (x1 == x3) {
-            return (x2 == x1) && this.isMiddle(y1, y2, y3)
-        }
-
-        if (y1 == y3) {
-            return (y2 == y1) && this.isMiddle(x1, x2, x3)
-        }
-
-        let m = parseFloat((y1 - y3) / (x1 - x3))
-        let b = y1 - m * x1
-        return (y2 == m * x2 + b) && this.isMiddle(x1, x2, x3) && this.isMiddle(y1, y2, y3)
-
     }
 
     kingAttackedManager(y, x, kingA) {
@@ -163,6 +142,81 @@ class BoardPieces {
 
     }
 
+    kingAttackAfterMove(piece, moves) {
+        let myColor = this.turn
+        moves = moves.filter(move => {
+            let res = false
+            let x = piece.x
+            let y = piece.y
+            pieceMoveToLocation(move.y, move.x)
+            let kingThreat = this.isKingAttacked()
+            pieceMoveToLocation(y, x)
+            res = !kingThreat.threat || this.kingAttackedManager(move.y, move.x, kingThreat)
+            return res
+        })
+        return moves
+        // })
+    }
+
+    isInbetween(loc1, loc2, loc3) {
+        let y1 = loc1.y
+        let y2 = loc2.y
+        let x1 = loc1.x
+        let x2 = loc2.x
+        let y3 = loc3.y
+        let x3 = loc3.x
+
+        if (x1 == x3) {
+            return (x2 == x1) && this.isMiddle(y1, y2, y3)
+        }
+
+        if (y1 == y3) {
+            return (y2 == y1) && this.isMiddle(x1, x2, x3)
+        }
+
+        let m = parseFloat((y1 - y3) / (x1 - x3))
+        let b = y1 - m * x1
+        return (y2 == m * x2 + b) && this.isMiddle(x1, x2, x3) && this.isMiddle(y1, y2, y3)
+
+    }
+
+    isMiddle(x1, x2, x3) {
+        return (x1 >= x2 && x2 >= x3) || (x1 <= x2 && x2 <= x3)
+    }
+
+    getAllOppMove(colorSelf, forT = true, initial = false) {
+
+        let possibleMovements = []
+
+        let filtered = this.pieces.filter(x => x.color != colorSelf && !x.deleted)
+        filtered.forEach(cell => {
+            let pos = cell.possibleMoveLocations(forT, initial)
+            pos.map(p => {
+                p.type = cell.type;
+                p.color = cell.color;
+                p.loc = {
+                    y: cell.y,
+                    x: cell.x
+                }
+            })
+            // console.log(pos);
+            possibleMovements.push(...pos)
+        })
+        // this.pieces.forEach((piece) => {
+        //     let isColor = piece.color != colorSelf
+        //     let posibilities = isColor ?
+        //         piece.possibleMoveLocations(true).filter(location => {
+        //             location.x == x && location.y == y
+        //         }) : []
+        //     threateningPieces.push(...posibilities)
+        // })
+        return possibleMovements
+    }
+
+    isMyTurn(index) {
+        return this.turn === this.pieces[index].color
+    }
+
     setLocation(y, x) {
         let index = this.index
         if (this.pieces.length > index &&
@@ -196,7 +250,7 @@ class BoardPieces {
 
                 }
                 if (this.pieces[index].type === 'pawn' && ((this.turn == 'white' && y == 0) || (this.turn == 'black' && y == 7)))
-                    setTimeout(() => this.makeMeQueen(index), 500)
+                    setTimeout(() => this.makePawnQueen(index), 500)
                 else
                     this.nexTurn()
 
@@ -204,7 +258,11 @@ class BoardPieces {
         }
     }
 
-    makeMeQueen(index) {
+    isLocationExists(y, x) {
+        return x > -1 && x < 8 && y > -1 && y < 8
+    }
+
+    makePawnQueen(index) {
         let piece = this.pieces[index]
         if (piece.type == 'pawn') {
             piece.type = 'queen'
@@ -213,62 +271,6 @@ class BoardPieces {
         }
 
         this.nexTurn()
-    }
-
-    isLocationExists(y, x) {
-        return x > -1 && x < 8 && y > -1 && y < 8
-    }
-
-    getAllOppMove(colorSelf, forT = true, initial = false) {
-
-        let possibleMovements = []
-
-        let filtered = this.pieces.filter(x => x.color != colorSelf && !x.deleted)
-        filtered.forEach(cell => {
-            let pos = cell.possibleMoveLocations(forT, initial)
-            pos.map(p => {
-                p.type = cell.type;
-                p.color = cell.color;
-                p.loc = {
-                    y: cell.y,
-                    x: cell.x
-                }
-            })
-            // console.log(pos);
-            possibleMovements.push(...pos)
-        })
-        // this.pieces.forEach((piece) => {
-        //     let isColor = piece.color != colorSelf
-        //     let posibilities = isColor ?
-        //         piece.possibleMoveLocations(true).filter(location => {
-        //             location.x == x && location.y == y
-        //         }) : []
-        //     threateningPieces.push(...posibilities)
-        // })
-        return possibleMovements
-    }
-
-    inializePiece(Arr) {
-        let divTurn = document.createElement('div')
-        divTurn.classList.add('div-turn')
-        divTurn.style.color = 'white'
-        divTurn.style.bottom =
-            // document.querySelector('.board-reverse') ? '100%' : 
-            '-10%'
-        divTurn.innerHTML = `<h2>white's turn</h2>`
-        document.body.querySelector('.chess-inner').appendChild(divTurn)
-        this.turnDiv = divTurn
-
-        this.pieces = []
-        Arr.forEach((obj) => {
-            const keys = Object.keys(obj)
-            keys.forEach((key) => {
-                obj[key].forEach((piece, i) => {
-                    const newPiece = new Piece(piece.y, piece.x, piece.type, piece.color, piece.class, this, i)
-                    this.pieces.push(newPiece)
-                })
-            })
-        })
     }
 
     nexTurn() {
@@ -284,8 +286,13 @@ class BoardPieces {
         this.whoseTurn()
     }
 
-    isMyTurn(index) {
-        return this.turn === this.pieces[index].color
+    whoseTurn() {
+        this.turnDiv.style.opacity = '0'
+        setTimeout(() => {
+            this.turnDiv.style.opacity = '1'
+            this.turnDiv.style.color = this.turn
+            this.turnDiv.firstElementChild.innerHTML = `${this.turn}'s turn`
+        }, 500)
     }
 
     hasMoves() {
@@ -319,22 +326,6 @@ class BoardPieces {
         return false
     }
 
-    kingAttackAfterMove(piece, moves) {
-        let myColor = this.turn
-        moves = moves.filter(move => {
-            let res = false
-            let x = piece.x
-            let y = piece.y
-            piece.MoveLocations(move.y, move.x)
-            let kingThreat = this.isKingAttacked()
-            piece.MoveLocations(y, x)
-            res = !kingThreat.threat || this.kingAttackedManager(move.y, move.x, kingThreat)
-            return res
-        })
-        return moves
-        // })
-    }
-
     winner(winColor) {
         const winDiv = document.createElement('div')
         winDiv.classList.add('winner-div')
@@ -349,7 +340,7 @@ class BoardPieces {
 }
 
 
-
+// extends BoardPiece due to sometimes similar functionality
 class Piece extends BoardPieces {
     /**
      * 
@@ -385,7 +376,6 @@ class Piece extends BoardPieces {
         this.icon = icon
     }
 
-
     appendPiece() {
         this.memory.push({
             y: this.y,
@@ -397,7 +387,12 @@ class Piece extends BoardPieces {
     deletePiece() {
         this.icon.remove()
         this.deleted = true
-        this.MoveLocations(-1, -1)
+        thisMoveToLocation(-1, -1)
+    }
+
+    MoveToLocation(y, x) {
+        this.x = x
+        this.y = y
     }
 
     possibleMoveLocations(isForT = false, initial = true) {
@@ -421,21 +416,8 @@ class Piece extends BoardPieces {
         return result
     }
 
-    MoveLocations(y, x) {
-        this.x = x
-        this.y = y
-    }
-
-    isBlack(val = null) {
-        if (val)
-            return this.color == 'black' ? val : -val
-        return this.color == 'black'
-    }
-
-    getOpponentColor() {
-        return this.color == 'black' ? 'white' : 'black'
-    }
-
+    // calculate possible moves for each piece type
+    // < ----
     pawnMove(isForT = false) {
         let y = this.y
         let x = this.x
@@ -763,5 +745,16 @@ class Piece extends BoardPieces {
 
         }
         return moves
+    }
+    // ---- >
+
+    isBlack(val = null) {
+        if (val)
+            return this.color == 'black' ? val : -val
+        return this.color == 'black'
+    }
+
+    getOpponentColor() {
+        return this.color == 'black' ? 'white' : 'black'
     }
 }

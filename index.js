@@ -1,27 +1,11 @@
 const WebSocket = require('websocket').server
-
-const http = require('http');
-
-const {
-    Server
-} = require('ws')
-
 const express = require('express')
-
-// const {
-//     start
-// } = require('repl');
-// const server = http.createServer()
 
 const PORT = process.env.PORT || 3000
 
-// server.listen(PORT, () => {
-//     console.log('server started on port ' + PORT);
-// })
-
 const INDEX = './index.html'
 
-const server = express()
+const app = express()
     .get('/chess', (req, res) => res.sendFile(INDEX, {
         root: __dirname + '/public'
     }))
@@ -33,7 +17,7 @@ const server = express()
 
 
 const wss = new WebSocket({
-    'httpServer': server
+    'httpServer': app
 })
 
 let clients = {}
@@ -49,7 +33,7 @@ let colors = {
 wss.on('request', request => {
     const connection = request.accept(null, request.origin)
     connection.on('open', () => {
-        console.log('connection opened');
+        console.log('new client connected');
     })
 
     connection.on('close', () => {
@@ -133,7 +117,7 @@ wss.on('request', request => {
             let game = games[gameID]
             game.clients.forEach(c => c.clientID != clientID && clients[c.clientID].connection.send(JSON.stringify(payLoad)))
         }
-
+        // connect between 2 players
         if (result.method == 'random') {
             let clientID = result.clientID
             if (randomGames.length && randomGames.indexOf(clientID) == -1) {
@@ -176,14 +160,14 @@ wss.on('request', request => {
         clientID,
     }
 
-    console.log(payLoad);
+    // console.log(payLoad);
 
     connection.send(JSON.stringify(payLoad))
 
 })
 
 
-
+//id generator
 function guid() {
     function S4() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
