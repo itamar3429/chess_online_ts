@@ -191,7 +191,8 @@
 
     .chess-inner{
     
-        background-image: radial-gradient(rgb(24, 35, 56) 30%, rgb(24, 35, 56, 0.8) 50%, rgb(24, 35, 56, 0.7) 55%, rgb(24, 35, 56, 0.4) 100%)
+        background-image: radial-gradient(rgb(24, 35, 56) 30%, rgb(24, 35, 56, 0.8) 50%, rgb(24, 35, 56, 0.7) 55%, rgb(24, 35, 56, 0.4) 100%);
+        user-select: none;
     }
 
     .chess-container table tbody{
