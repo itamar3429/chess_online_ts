@@ -1,0 +1,174 @@
+#start-game {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background-image: url("../img/AdobeStock_236786791.webp");
+	background-size: cover;
+	background-position: center;
+	box-shadow: inset 0 0 0 1000px rgba(42, 40, 63, 0.2);
+}
+
+#start-game h1,
+#start-game h2 {
+	color: black;
+	font-weight: 550;
+}
+
+#start-game * {
+	margin: 30px;
+	text-align: center;
+}
+
+#loader {
+	border: 16px solid #f3f3f3;
+	border-top: 16px solid #3498db;
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+#loader-container {
+	width: 100%;
+	height: 100vh;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transition: 1s;
+	background-image: url("../img/AdobeStock_236786791.webp");
+	background-size: cover;
+	background-position: center;
+	box-shadow: inset 0 0 0 1000px rgba(42, 40, 63, 0.2);
+	color: white;
+}
+
+#copy-lbl {
+	position: absolute;
+	right: -115px;
+
+	padding: 3px 7px !important;
+	margin: 3px;
+	background-color: black;
+	color: rgb(211, 211, 211);
+	border-radius: 5px;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s, opacity 0.5s linear;
+}
+
+#copy-lbl::after {
+	content: "";
+	top: 50%;
+	transform: translateY(-50%);
+	border-left: 5px solid transparent;
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+	border-right: 5px solid black;
+	left: -10px;
+	position: absolute;
+}
+
+#copyBtn {
+	margin: 5px 10px !important;
+	cursor: pointer;
+	position: relative;
+	color: rgb(199, 196, 196);
+	position: absolute;
+	right: -40px;
+}
+
+#copyBtn:hover::after {
+	content: "copy";
+	font-size: 11px;
+	font-family: sans-serif;
+	top: -110%;
+	transform: translate(50%, -50%);
+	background-color: black;
+	padding: 6px 8px;
+	border-radius: 3px;
+	right: 50%;
+	position: absolute;
+	color: rgb(211, 211, 211);
+}
+
+#join-game,
+#join-random,
+#new-game {
+	position: relative;
+}
+
+#new-game::after {
+	content: "create a new game room and retrieves a game id";
+	font-size: 12px;
+	font-family: sans-serif;
+	top: -60%;
+	transform: translate(-50%, -50%);
+	background-color: black;
+	padding: 6px 8px;
+	border-radius: 3px;
+	left: 50%;
+	position: absolute;
+	color: rgb(211, 211, 211);
+	opacity: 0;
+	transition: visibility 0s, opacity 1s;
+}
+
+#new-game:hover:after {
+	opacity: 1;
+}
+
+#join-game::after {
+	content: "join game with a generated game ID";
+	font-size: 12px;
+	font-family: sans-serif;
+	top: -60%;
+	transform: translate(-50%, -50%);
+	background-color: black;
+	padding: 6px 8px;
+	border-radius: 3px;
+	left: 50%;
+	position: absolute;
+	color: rgb(211, 211, 211);
+	opacity: 0;
+	transition: visibility 0s, opacity 1s;
+}
+
+#join-game:hover:after {
+	opacity: 1;
+}
+
+#join-random::after {
+	content: "join game with a random player";
+	font-size: 12px;
+	font-family: sans-serif;
+	top: -60%;
+	transform: translate(-50%, -50%);
+	background-color: black;
+	padding: 6px 8px;
+	border-radius: 3px;
+	left: 50%;
+	position: absolute;
+	color: rgb(211, 211, 211);
+	opacity: 0;
+	transition: visibility 0s, opacity 1s;
+}
+
+#join-random:hover:after {
+	opacity: 1;
+}

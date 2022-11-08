@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>check-mate</title>
+	<link rel="stylesheet" href="./css/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="/js/libs/fontawesome.js"></script>
+	<script src="/app.js" defer></script>
+
+
+</head>
+
+<body>
+
+	<div id="start-game">
+		<h1>chess game</h1>
+		<h2>create a new game or join a game</h2>
+		<button type="button" id="new-game" class="btn btn-secondary">create a game</button>
+
+		<!-- <div class="join-game"> -->
+		<div style="display: flex; justify-content: center;  align-items: center; position: relative;">
+			<input type="text" style="margin: 5px !important;" id="game-id" placeholder="game id to join"
+				class="form-control">
+			<i id="copyBtn" class="fa-solid fa-copy" tabindex="0"></i>
+			<label id="copy-lbl" for="copy">Copied!</label>
+		</div>
+
+		<div style="display: flex; justify-content: space-around;">
+			<button id="join-game" class="btn btn-secondary">join game</button>
+
+			<button id="join-random" class="btn btn-secondary">auto assign</button>
+		</div>
+		<!-- </div> -->
+	</div>
+	<div id="loader-container">
+		<div id="loader"></div>
+		<h4>waiting for a player to join</h4>
+	</div>
+</body>
+
+</html>
